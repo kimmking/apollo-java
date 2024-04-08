@@ -148,6 +148,13 @@ public class ApolloTestingServer implements AutoCloseable {
         return GSON.toJson(apolloConfig);
     }
 
+    public void loadOverriddenConfigForFilename(String namespace, String filename) {
+        final Properties prop = ResourceUtils.readConfigFile(filename, new Properties());
+        for (String propertyName : prop.stringPropertyNames()) {
+            addOrModifyProperty(namespace, propertyName, prop.getProperty(propertyName));
+        }
+    }
+
     private String mockLongPollBody(String notificationsStr) {
         List<ApolloConfigNotification> oldNotifications = GSON.fromJson(notificationsStr, notificationType);
         List<ApolloConfigNotification> newNotifications = new ArrayList<>();
